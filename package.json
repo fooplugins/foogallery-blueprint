@@ -1,0 +1,15 @@
+{
+    "name": "foo-gallery-playground",
+    "version": "1.0.0",
+    "description": "Local test environment for FooGallery plugin using WordPress Playground",
+    "scripts": {
+      "start": "npx @wp-playground/cli server --debug --blueprint=./blueprint.json"
+    },
+    "devDependencies": {
+      "@wp-playground/cli": "^1.0.0"
+    },
+    "engines": {
+      "node": ">=18"
+    }
+  }
+  
