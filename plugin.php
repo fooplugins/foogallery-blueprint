@@ -12,6 +12,6 @@ defined( 'ABSPATH' ) || exit;
 define( 'WP_FS__DEV_MODE', true );
 define( 'WP_FS__SKIP_EMAIL_ACTIVATION', true );
 
-add_action( 'init', function() { 
-    foogallery_create_demo_content(); 
-} );
+// add_action( 'init', function() { 
+//     foogallery_create_demo_content(); 
+// } );
