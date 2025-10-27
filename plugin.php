@@ -9,8 +9,7 @@
 defined( 'ABSPATH' ) || exit;
 
 // Make sure we do not need to optin.
-define( 'WP_FS__DEV_MODE', true );
-define( 'WP_FS__SKIP_EMAIL_ACTIVATION', true );
+define( 'FOOPLUGINS_FREEMIUS_ANONYMOUS', true );
 
 // add_action( 'init', function() { 
 //     foogallery_create_demo_content(); 
