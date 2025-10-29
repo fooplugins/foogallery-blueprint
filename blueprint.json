@@ -1,15 +1,15 @@
 {
     "$schema": "https://playground.wordpress.net/blueprint-schema.json",
     "landingPage": "/wp-admin/",
-    "login": true,
     "preferredVersions": {
         "php": "8.3",
         "wp": "latest"
     },
+    "login": true,
     "steps": [
         {
 			"step": "writeFile",
-			"path": "/wordpress/wp-content/plugins/foogallery-demo-plugin.php",
+			"path": "/wordpress/wp-content/plugins/0-plugin.php",
 			"data": {
 				"resource": "url",
 				"url": "https://raw.githubusercontent.com/fooplugins/foogallery-blueprint/refs/heads/main/plugin.php"
@@ -18,7 +18,7 @@
 		{
 			"step": "activatePlugin",
 			"pluginName": "FooGallery Demo Plugin",
-			"pluginPath": "foogallery-demo-plugin.php"
+			"pluginPath": "0-plugin.php"
 		},
         {
             "step": "installPlugin",
@@ -29,11 +29,6 @@
             "options": {
                 "activate": true
             }
-        },
-        {
-            "step": "login",
-            "username": "admin",
-            "password": "password"
         }
     ]
 }
