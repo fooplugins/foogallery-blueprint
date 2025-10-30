@@ -51,9 +51,9 @@ function foogallery_playground_render_settings_page() {
 }
 
 add_action( 'admin_init', function() {
-    remove_action( 'welcome_panel', 'wp_welcome_panel' );
-    add_action( 'wp_dashboard_setup', 'foogallery_playground_add_dashboard_widget' );
-    add_action( 'welcome_panel', 'foogallery_playground_render_dashboard_widget' );
+	remove_action( 'welcome_panel', 'wp_welcome_panel' );
+	add_action( 'wp_dashboard_setup', 'foogallery_playground_add_dashboard_widget' );
+	add_action( 'welcome_panel', 'foogallery_playground_render_dashboard_widget' );
 } );
 
 function foogallery_playground_add_dashboard_widget() {
@@ -61,20 +61,27 @@ function foogallery_playground_add_dashboard_widget() {
     remove_meta_box( 'dashboard_right_now', 'dashboard', 'normal' );
     remove_meta_box( 'dashboard_site_health', 'dashboard', 'normal' );
     remove_meta_box( 'dashboard_quick_press', 'dashboard', 'side' );
-    remove_meta_box( 'dashboard_activity', 'dashboard', 'normal' );
+    remove_meta_box( 'dashboard_activity', 'dashboard', 'side' );
     remove_meta_box( 'dashboard_primary', 'dashboard', 'side' );
     remove_meta_box( 'dashboard_secondary', 'dashboard', 'side' );
 }
 
 function foogallery_playground_render_dashboard_widget() {
-	$new_gallery_url   = admin_url( 'post-new.php?post_type=foogallery' );
-	$list_galleries_url = admin_url( 'edit.php?post_type=foogallery' );
-	$demo_galleries_url = '/';
+	$new_gallery_url       = admin_url( 'post-new.php?post_type=foogallery' );
+	$list_galleries_url    = admin_url( 'edit.php?post_type=foogallery' );
+	$demo_galleries_url     = '/';
+	$demo_created           = (int) get_option( 'foogallery_playground_demo_content_created' ) > 0;
+	$nonce                  = wp_create_nonce( 'foogallery_playground_create_demo' );
+	$status_text            = '';
+	$spinner_class          = $demo_created ? '' : ' is-active';
+	$aria_busy              = $demo_created ? 'false' : 'true';
+	$status_hidden_attr     = ' hidden';
+	$link_hidden_attr       = $demo_created ? '' : ' hidden';
 	?>
-    <style>
-        .welcome-panel-close {
-            display: none;
-        }
+	<style>
+		.welcome-panel-close {
+			display: none;
+		}
 		.foogallery-playground-panel-content {
 			display: flex;
 			flex-direction: column;
@@ -92,7 +99,35 @@ function foogallery_playground_render_dashboard_widget() {
 			color: #7e4eff;
 		}
 
-		.foogallery-playground-panel-content .foogallery-playground-panel-column-container{
+		.foogallery-playground-demo-status-wrap {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			margin-top: 12px;
+		}
+
+		.foogallery-playground-demo-status-wrap .spinner {
+			float: none;
+			margin: 0;
+		}
+
+		.foogallery-playground-demo-status {
+			margin: 0;
+		}
+
+		.foogallery-playground-demo-status.foogallery-playground-status-progress {
+			color: #2271b1;
+		}
+
+		.foogallery-playground-demo-status.foogallery-playground-status-success {
+			color: #0a9544;
+		}
+
+		.foogallery-playground-demo-status.foogallery-playground-status-error {
+			color: #d63638;
+		}
+
+		.foogallery-playground-panel-content .foogallery-playground-panel-column-container {
 			box-sizing: border-box;
 			width: 100%;
 			clear: both;
@@ -104,24 +139,28 @@ function foogallery_playground_render_dashboard_widget() {
 			align-self: flex-end;
 			background: #fff;
 		}
-    </style>
+	</style>
 	<div class="foogallery-playground-panel-content">
 		<div class="foogallery-playground-panel-header">
 			<h2><?php _e( 'FooGallery Playground' ); ?></h2>
 			<p>
-				<a href="<?php echo esc_url( 'https://fooplugins.com/foogallery-wordpress-gallery-plugin/' ); ?>" target="_blank">
+				<a href="<?php echo esc_url( 'https://fooplugins.com/foogallery-wordpress-gallery-plugin/' ); ?>" target="_blank" rel="noopener noreferrer">
 					<?php esc_html_e( 'Learn more about FooGallery', 'foogallery-demo' ); ?>
 				</a>
 			</p>
 		</div>
 		<div class="foogallery-playground-panel-column-container">
 			<div class="foogallery-playground-panel-column">
-				<div class="foogallery-playground-panel-column-content">
+				<div class="foogallery-playground-panel-column-content" id="foogallery-playground-demo-column">
 					<h3><?php esc_html_e( 'Demo Galleries', 'foogallery-playground' ); ?></h3>
 					<p><?php esc_html_e( 'Explore pre-built demo galleries in the backend.', 'foogallery-playground' ); ?></p>
-					<a class="welcome-icon welcome-edit-page" href="<?php echo esc_url( $list_galleries_url ); ?>">
-						<?php esc_html_e( 'Browse Demo Galleries', 'foogallery-playground' ); ?>
-					</a>
+						<div class="foogallery-playground-demo-status-wrap" id="foogallery-playground-demo-status-wrap" data-created="<?php echo $demo_created ? '1' : '0'; ?>" data-nonce="<?php echo esc_attr( $nonce ); ?>" aria-live="polite" aria-busy="<?php echo esc_attr( $aria_busy ); ?>">
+							<span class="spinner<?php echo $spinner_class; ?>" id="foogallery-playground-demo-spinner"></span>
+							<p class="description foogallery-playground-demo-status" id="foogallery-playground-demo-status" role="status"<?php echo $status_hidden_attr; ?>><?php echo esc_html( $status_text ); ?></p>
+						</div>
+						<a class="welcome-icon welcome-edit-page" id="foogallery-playground-demo-link"<?php echo $link_hidden_attr; ?> href="<?php echo esc_url( $list_galleries_url ); ?>">
+							<?php esc_html_e( 'Browse Demo Galleries', 'foogallery-playground' ); ?>
+						</a>
 				</div>
 			</div>
 			<div class="foogallery-playground-panel-column">
@@ -144,9 +183,184 @@ function foogallery_playground_render_dashboard_widget() {
 			</div>
 		</div>
 	</div>
+	<script>
+		jQuery(function($) {
+			const $statusWrap = $('#foogallery-playground-demo-status-wrap');
+			if (!$statusWrap.length) {
+				return;
+			}
+
+			const $spinner = $('#foogallery-playground-demo-spinner');
+			const $status = $('#foogallery-playground-demo-status');
+			const $link = $('#foogallery-playground-demo-link');
+			const nonce = $statusWrap.data('nonce');
+			let created = Number($statusWrap.data('created')) === 1;
+
+			function setStatus(message, type) {
+				$status.removeClass('foogallery-playground-status-success foogallery-playground-status-error foogallery-playground-status-progress');
+				if (!message) {
+					$status.attr('hidden', 'hidden').text('');
+					return;
+				}
+
+				$status.removeAttr('hidden');
+
+				if (type === 'success') {
+					$status.addClass('foogallery-playground-status-success');
+				} else if (type === 'error') {
+					$status.addClass('foogallery-playground-status-error');
+				} else if (type === 'progress') {
+					$status.addClass('foogallery-playground-status-progress');
+				}
+
+				$status.text(message);
+			}
+
+			function markCreated() {
+				created = true;
+				$statusWrap.data('created', 1);
+				$statusWrap.attr('data-created', '1');
+				setStatus('', '');
+				$link.removeAttr('hidden');
+			}
+
+			function triggerDemoCreation() {
+				if (!nonce) {
+					$spinner.removeClass('is-active');
+					$statusWrap.attr('aria-busy', 'false');
+					return;
+				}
+
+				$statusWrap.attr('aria-busy', 'true');
+				$spinner.addClass('is-active');
+				setStatus('Creating demo content...', 'progress');
+
+				$.post(ajaxurl, {
+					action: 'foogallery_playground_create_demo_content',
+					_ajax_nonce: nonce
+				}).done(function(response) {
+					if (response && response.success) {
+						markCreated();
+						return;
+					}
+
+					if (response && response.data && response.data.already_created) {
+						markCreated();
+						return;
+					}
+
+					const errorMessage = response && response.data && response.data.message ? response.data.message : '<?php echo esc_js( __( 'Unable to create demo content.', 'foogallery-playground' ) ); ?>';
+					setStatus(errorMessage, 'error');
+				}).fail(function() {
+					setStatus('<?php echo esc_js( __( 'An unexpected error occurred. Please try again.', 'foogallery-playground' ) ); ?>', 'error');
+				}).always(function() {
+					$spinner.removeClass('is-active');
+					$statusWrap.attr('aria-busy', 'false');
+				});
+			}
+
+			if (!created) {
+				triggerDemoCreation();
+			} else {
+				$statusWrap.attr('aria-busy', 'false');
+				$spinner.removeClass('is-active');
+				$link.removeAttr('hidden');
+			}
+		});
+	</script>
 	<?php
 }
 
-// add_action( 'init', function() { 
-//     foogallery_create_demo_content(); 
-// } );
+function foogallery_playground_maybe_create_demo_content() {
+	$existing_timestamp = (int) get_option( 'foogallery_playground_demo_content_created' );
+
+	if ( $existing_timestamp ) {
+		return new WP_Error(
+			'foogallery_playground_demo_already_created',
+			__( 'Demo content has already been created.', 'foogallery-playground' ),
+			[ 'created_at' => $existing_timestamp ]
+		);
+	}
+
+	if ( ! function_exists( 'foogallery_create_demo_content' ) ) {
+		return new WP_Error(
+			'foogallery_playground_demo_unavailable',
+			__( 'Demo content importer is unavailable.', 'foogallery-playground' )
+		);
+	}
+
+	if ( ! current_user_can( 'manage_options' ) ) {
+		return new WP_Error(
+			'foogallery_playground_demo_capability',
+			__( 'You do not have permission to create demo content.', 'foogallery-playground' )
+		);
+	}
+
+	$created = foogallery_create_demo_content();
+
+	if ( false === $created ) {
+		return new WP_Error(
+			'foogallery_playground_demo_failed',
+			__( 'Demo content could not be created.', 'foogallery-playground' )
+		);
+	}
+
+	$timestamp = current_time( 'timestamp' );
+
+	update_option( 'foogallery_playground_demo_content_created', $timestamp );
+
+	return [
+		'created'    => $created,
+		'created_at' => $timestamp,
+	];
+}
+
+add_action( 'wp_ajax_foogallery_playground_create_demo_content', 'foogallery_playground_ajax_create_demo_content' );
+
+function foogallery_playground_ajax_create_demo_content() {
+	check_ajax_referer( 'foogallery_playground_create_demo' );
+
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error(
+			[
+				'message' => __( 'You are not allowed to create demo content.', 'foogallery-playground' ),
+			],
+			403
+		);
+	}
+
+	$result = foogallery_playground_maybe_create_demo_content();
+
+	if ( is_wp_error( $result ) ) {
+		$data = [
+			'message' => $result->get_error_message(),
+		];
+
+		if ( 'foogallery_playground_demo_already_created' === $result->get_error_code() ) {
+			$error_data = $result->get_error_data();
+			if ( isset( $error_data['created_at'] ) ) {
+				$created_at      = (int) $error_data['created_at'];
+				$data['message'] = sprintf(
+					__( 'Demo content was already created on %s.', 'foogallery-playground' ),
+					date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $created_at )
+				);
+				$data['created_at'] = $created_at;
+			}
+			$data['already_created'] = true;
+		}
+
+		wp_send_json_error( $data );
+	}
+
+	$created_at = isset( $result['created_at'] ) ? (int) $result['created_at'] : 0;
+
+	wp_send_json_success(
+		[
+			'message'     => sprintf(
+				__( 'Demo content created on %s.', 'foogallery-playground' ),
+				date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $created_at )
+			),
+			'created_at' => $created_at,
+		]
+	);
+}
