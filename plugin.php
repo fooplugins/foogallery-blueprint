@@ -8,10 +8,6 @@
 
 defined( 'ABSPATH' ) || exit;
 
-// Make sure we do not need to optin.
-define( 'FOOPLUGINS_FREEMIUS_ANONYMOUS', true );
-define( 'WP_FS__DEV_MODE', true );
-
 if ( !is_admin() ) return;
 
 // Add a basic settings page
