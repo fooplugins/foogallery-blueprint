@@ -21,6 +21,9 @@ add_action( 'admin_menu', function() {
 	);
 } );
 
+//Hides the default Welcome Panel
+remove_action( 'welcome_panel', 'wp_welcome_panel' );
+
 function foogallery_demo_render_settings_page() {
 	if ( ! current_user_can( 'manage_options' ) ) {
 		return;
@@ -48,6 +51,54 @@ function foogallery_demo_render_settings_page() {
 
 	echo '</tbody></table>';
 	echo '</div>';
+}
+
+add_action( 'wp_dashboard_setup', 'foogallery_demo_add_dashboard_widget' );
+
+function foogallery_demo_add_dashboard_widget() {
+	wp_add_dashboard_widget(
+		'foogallery_playground_dashboard_widget',
+		__( 'FooGallery Playground', 'foogallery-demo' ),
+		'foogallery_demo_render_dashboard_widget'
+	);
+}
+
+function foogallery_demo_render_dashboard_widget() {
+	$new_gallery_url   = admin_url( 'post-new.php?post_type=foogallery' );
+	$view_galleries_url = admin_url( 'edit.php?post_type=foogallery' );
+	$demo_galleries_url = '/';
+	?>
+	<div class="welcome-panel-content">
+		<p class="about-description">
+			<a href="<?php echo esc_url( 'https://fooplugins.com/foogallery-wordpress-gallery-plugin/' ); ?>" target="_blank" rel="noopener noreferrer">
+				<?php esc_html_e( 'Learn more about FooGallery', 'foogallery-demo' ); ?>
+			</a>
+		</p>
+		<div class="welcome-panel-column-container">
+			<div class="welcome-panel-column">
+				<h3><?php esc_html_e( 'Demo Galleries', 'foogallery-demo' ); ?></h3>
+				<p><?php esc_html_e( 'Explore pre-built galleries to see FooGallery in action.', 'foogallery-demo' ); ?></p>
+				<a class="welcome-icon welcome-view-site" href="<?php echo esc_url( $demo_galleries_url ); ?>">
+					<?php esc_html_e( 'Browse Demo Galleries', 'foogallery-demo' ); ?>
+				</a>
+			</div>
+			<div class="welcome-panel-column">
+				<h3><?php esc_html_e( 'Add New Gallery', 'foogallery-demo' ); ?></h3>
+				<p><?php esc_html_e( 'Start building a new FooGallery.', 'foogallery-demo' ); ?></p>
+				<a class="welcome-icon welcome-add-page" href="<?php echo esc_url( $new_gallery_url ); ?>">
+					<?php esc_html_e( 'Create Gallery', 'foogallery-demo' ); ?>
+				</a>
+			</div>
+			<div class="welcome-panel-column">
+				<h3><?php esc_html_e( 'View Galleries', 'foogallery-demo' ); ?></h3>
+				<p><?php esc_html_e( 'Manage all of your existing FooGalleries.', 'foogallery-demo' ); ?></p>
+				<a class="welcome-icon welcome-edit-page" href="<?php echo esc_url( $view_galleries_url ); ?>">
+					<?php esc_html_e( 'Manage Galleries', 'foogallery-demo' ); ?>
+				</a>
+			</div>
+		</div>
+	</div>
+	<?php
 }
 
 // add_action( 'init', function() { 
