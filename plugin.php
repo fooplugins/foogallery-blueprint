@@ -54,13 +54,22 @@ function foogallery_demo_render_settings_page() {
 }
 
 add_action( 'wp_dashboard_setup', 'foogallery_demo_add_dashboard_widget' );
+add_action( 'welcome_panel', 'foogallery_demo_render_dashboard_widget' );
 
 function foogallery_demo_add_dashboard_widget() {
-	wp_add_dashboard_widget(
-		'foogallery_playground_dashboard_widget',
-		__( 'FooGallery Playground', 'foogallery-demo' ),
-		'foogallery_demo_render_dashboard_widget'
-	);
+    //Remove the default dashboard widgets
+    remove_meta_box( 'dashboard_right_now', 'dashboard', 'normal' );
+    remove_meta_box( 'dashboard_site_health', 'dashboard', 'normal' );
+    remove_meta_box( 'dashboard_quick_press', 'dashboard', 'side' );
+    remove_meta_box( 'dashboard_activity', 'dashboard', 'side' );
+    remove_meta_box( 'dashboard_primary', 'dashboard', 'side' );
+    remove_meta_box( 'dashboard_secondary', 'dashboard', 'side' );
+
+	// wp_add_dashboard_widget(
+	// 	'foogallery_playground_dashboard_widget',
+	// 	__( 'FooGallery Playground', 'foogallery-demo' ),
+	// 	'foogallery_demo_render_dashboard_widget'
+	// );
 }
 
 function foogallery_demo_render_dashboard_widget() {
