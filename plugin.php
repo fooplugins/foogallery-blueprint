@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       FooGallery Demo Plugin
  * Description:       Sets everything up to get FooGallery working in Playground.
- * Version:           0.0.1
+ * Version:           0.0.2
  * Requires at least: 6.5
  */
 
@@ -53,7 +53,7 @@ function foogallery_demo_render_settings_page() {
 	echo '</div>';
 }
 
-add_action( 'wp_dashboard_setup', 'foogallery_demo_add_dashboard_widget' );
+add_action( 'init', 'foogallery_demo_add_dashboard_widget' );
 add_action( 'welcome_panel', 'foogallery_demo_render_dashboard_widget' );
 
 function foogallery_demo_add_dashboard_widget() {
