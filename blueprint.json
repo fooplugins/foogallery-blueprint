@@ -8,6 +8,13 @@
     "login": true,
     "steps": [
         {
+            "step": "defineWpConfigConsts",
+            "consts": {
+                "FOOPLUGINS_FREEMIUS_ANONYMOUS": true,
+                "WP_FS__DEV_MODE": true
+            }
+        },
+        {
 			"step": "writeFile",
 			"path": "/wordpress/wp-content/plugins/0-plugin.php",
 			"data": {
