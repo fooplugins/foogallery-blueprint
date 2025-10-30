@@ -15,6 +15,16 @@
             }
         },
         {
+            "step": "setSiteOptions",
+            "options": {
+                "blogname": "FooGallery Playground",
+                "blogdescription": "A demo playground showcasing what FooGallery can do"
+            }
+        },
+        {
+            "step": "resetData"
+        },
+        {
 			"step": "writeFile",
 			"path": "/wordpress/wp-content/plugins/0-plugin.php",
 			"data": {
