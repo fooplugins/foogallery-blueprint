@@ -10,8 +10,7 @@
         {
             "step": "defineWpConfigConsts",
             "consts": {
-                "FOOPLUGINS_FREEMIUS_ANONYMOUS": true,
-                "WP_FS__DEV_MODE": true
+                "FOOPLUGINS_FREEMIUS_ANONYMOUS": true
             }
         },
         {
