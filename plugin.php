@@ -165,8 +165,9 @@ function foogallery_playground_render_dashboard_widget() {
 			</div>
 			<div class="foogallery-playground-panel-column">
 				<div class="foogallery-playground-panel-column-content">
-					<h3><?php esc_html_e( 'View Galleries (Frontend)', 'foogallery-playground' ); ?></h3>
+					<h3><?php esc_html_e( 'View Galleries', 'foogallery-playground' ); ?></h3>
 					<p><?php esc_html_e( 'See FooGallery in action on the frontend!', 'foogallery-playground' ); ?></p>
+					<p><?php esc_html_e( '(wait for the demo galleries to be created)', 'foogallery-playground' ); ?></p>
 					<a class="welcome-icon welcome-view-site" href="<?php echo esc_url( $demo_galleries_url ); ?>">
 						<?php esc_html_e( 'View Galleries', 'foogallery-playground' ); ?>
 					</a>
@@ -220,6 +221,7 @@ function foogallery_playground_render_dashboard_widget() {
 				created = true;
 				$statusWrap.data('created', 1);
 				$statusWrap.attr('data-created', '1');
+				$statusWrap.hide();
 				setStatus('', '');
 				$link.removeAttr('hidden');
 			}
