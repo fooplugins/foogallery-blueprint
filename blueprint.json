@@ -18,7 +18,8 @@
             "step": "setSiteOptions",
             "options": {
                 "blogname": "FooGallery Playground",
-                "blogdescription": "A demo playground showcasing what FooGallery can do"
+                "blogdescription": "A demo playground showcasing what FooGallery can do",
+                "show_on_front": "page"
             }
         },
         {
@@ -45,6 +46,17 @@
             },
             "options": {
                 "activate": true
+            }
+        },
+        {
+            "step": "wp-cli",
+            "command": "wp post create --post_type=page --post_status=publish --post_title=\"Gallery Showcase\" --post_content=\"<h2>Our Responsive Gallery</h2>[foogallery id=12]<h2>Image Viewer Gallery</h2>[foogallery id=13]<h2>Justified Gallery</h2>[foogallery id=14]<h2>Masonry Gallery</h2>[foogallery id=15]<h2>Portfolio Gallery</h2>[foogallery id=16]<p>another varition of portfolio gallery</p>[foogallery id=17]<h2>Single Thumbnail Gallery</h2>[foogallery id=18]<h2>Carousel Gallery</h2>[foogallery id=19]<p>another carousel variation</p>[foogallery id=20]\" --porcelain"
+        },
+        {
+            "step": "setSiteOptions",
+            "options": {
+                "show_on_front": "page",
+                "page_on_front": 1
             }
         }
     ]
