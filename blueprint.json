@@ -55,7 +55,10 @@
             "step": "setSiteOptions",
             "options": {
                 "show_on_front": "page",
-                "page_on_front": 1
+                "page_on_front": 1,
+                "foogallery": {
+                    "pro_promo_disabled": "on"
+                }
             }
         }
     ]
